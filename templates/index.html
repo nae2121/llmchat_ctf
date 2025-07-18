@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Q&A</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="chat-container">
+    <h1 class="header">Simple Q&amp;A</h1>
+    <div class="assistant">
+      <img src="/static/avatar.png" class="avatar">
+      <div class="bubble">Hello, I am here for you to answer any question. Please feel free to ask anything.</div>
+    </div>
+    <div class="question-area">
+      <textarea id="input" placeholder="Type your question here."></textarea>
+      <button id="send">Submit</button>
+    </div>
+    <div id="conversation"></div>
+  </div>
+
+  <script>
+    document.getElementById('send').addEventListener('click', async () => {
+      const txt = document.getElementById('input').value.trim();
+      if (!txt) return;
+      // ユーザーの発言を表示
+      const conv = document.getElementById('conversation');
+      const userDiv = document.createElement('div');
+      userDiv.className = 'bubble user';
+      userDiv.innerText = txt;
+      conv.appendChild(userDiv);
+      // サーバーに投げる
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: txt })
+      });
+      const { reply } = await res.json();
+      // アシスタントの返答を表示
+      const botDiv = document.createElement('div');
+      botDiv.className = 'bubble';
+      botDiv.innerText = reply;
+      conv.appendChild(botDiv);
+      // スクロール
+      conv.scrollTop = conv.scrollHeight;
+    });
+  </script>
+</body>
+</html>
