@@ -1,0 +1,46 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Gemini チャット</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: auto; padding-top: 50px; }
+        .chat-box { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll; margin-bottom: 10px; }
+        .message { margin-bottom: 10px; }
+        .user { font-weight: bold; color: blue; }
+        .ai { font-weight: bold; color: green; }
+    </style>
+</head>
+<body>
+    <h2>Geminiとチャット</h2>
+    <div class="chat-box" id="chatBox"></div>
+    <input type="text" id="messageInput" placeholder="メッセージを入力..." style="width: 80%;">
+    <button onclick="sendMessage()">送信</button>
+
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById("messageInput");
+            const chatBox = document.getElementById("chatBox");
+            const message = input.value;
+            if (!message) return;
+
+            // ユーザーのメッセージを表示
+            chatBox.innerHTML += `<div class="message"><span class="user">あなた：</span> ${message}</div>`;
+            input.value = "";
+
+            // サーバーに送信
+            const res = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: message })
+            });
+            const data = await res.json();
+
+            // AIの返答を表示
+            chatBox.innerHTML += `<div class="message"><span class="ai">Gemini：</span> ${data.response}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight; // 自動スクロール
+        }
+    </script>
+</body>
+</html>
