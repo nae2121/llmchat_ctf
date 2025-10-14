@@ -1,46 +1,31 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>Gemini チャット</title>
-    <style>
-        body { font-family: sans-serif; max-width: 600px; margin: auto; padding-top: 50px; }
-        .chat-box { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll; margin-bottom: 10px; }
-        .message { margin-bottom: 10px; }
-        .user { font-weight: bold; color: blue; }
-        .ai { font-weight: bold; color: green; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css">
+  <!-- ★ defer を付ける -->
+  <script src="js/main.js" defer></script>
+  <title>prompt-leaking</title>
 </head>
 <body>
-    <h2>Geminiとチャット</h2>
-    <div class="chat-box" id="chatBox"></div>
-    <input type="text" id="messageInput" placeholder="メッセージを入力..." style="width: 80%;">
-    <button onclick="sendMessage()">送信</button>
+  <div class="app">
+    <header class="card header">
+      <div class="title">Let's talk to AI !</div>
+    </header>
 
-    <script>
-        async function sendMessage() {
-            const input = document.getElementById("messageInput");
-            const chatBox = document.getElementById("chatBox");
-            const message = input.value;
-            if (!message) return;
+    <main id="chatBox" class="card chat-box" aria-live="polite" aria-label="チャット履歴">
+      <div class="empty" id="emptyState">こんにちは！ 質問を入力して「送信」を押してください。</div>
+    </main>
 
-            // ユーザーのメッセージを表示
-            chatBox.innerHTML += `<div class="message"><span class="user">あなた：</span> ${message}</div>`;
-            input.value = "";
-
-            // サーバーに送信
-            const res = await fetch("/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: message })
-            });
-            const data = await res.json();
-
-            // AIの返答を表示
-            chatBox.innerHTML += `<div class="message"><span class="ai">Gemini：</span> ${data.response}</div>`;
-            chatBox.scrollTop = chatBox.scrollHeight; // 自動スクロール
-        }
-    </script>
+    <div class="card composer">
+      <textarea id="messageInput" class="input" placeholder="メッセージを入力…（Shift+Enterで改行 / Enterで送信）" rows="1" maxlength="200"></textarea>
+      <button id="sendBtn" class="send" aria-label="送信">送信</button>
+      <div class="helper">
+        <span id="charCount" class="limit">0/200</span>
+        <span>※ モデルの返答は安全のためテキストとして表示します</span>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
