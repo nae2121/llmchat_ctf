@@ -60,7 +60,7 @@ window.addEventListener('DOMContentLoaded', () => {
       avatar.className = 'avatar ' + (role === 'user' ? 'user' : 'ai');
       avatar.setAttribute('aria-label', role === 'user' ? 'You' : 'AI');
       const img = document.createElement('img');
-      img.src = role === 'user' ? 'img/You.png' : 'img/AI.png';  // ← 画像パス
+      img.src = role === 'user' ? IMG_URL + 'You.png' : IMG_URL + 'AI.png';  // ← 画像パス
       img.alt = role === 'user' ? 'You' : 'AI';
       img.className = 'avatar-img';
       avatar.appendChild(img);

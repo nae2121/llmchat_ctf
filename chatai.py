@@ -34,22 +34,7 @@ class ChatBot:
             "<start_of_turn>model"
         )
         response = self.client.models.generate_content(
-            model="gemini-2.0-flash",
+            model="gemini-3-flash-preview",
             contents=full_prompt
         )
         return response.text
-    
-    def reply(self,text):
-        full_prompt = (
-            "<start_of_turn>user\n"
-            f"{self.system_instruction}\n\n"
-            f"{text}\n"
-            "\n"
-            "<start_of_turn>model"
-        )
-        response = self.client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=full_prompt
-        )
-        return response.text
-    

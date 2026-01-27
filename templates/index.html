@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
   <!-- ★ defer を付ける -->
-  <script src="js/main.js" defer></script>
+   <script> 
+    const IMG_URL = "{{ url_for('static', filename='img/') }}";
+   </script>
+  <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
   <title>prompt-leaking</title>
 </head>
 <body>
